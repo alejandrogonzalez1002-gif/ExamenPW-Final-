@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Compra de Pintura</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f9f9f9;
+      font-family: 'Segoe UI', sans-serif;
+      color: #333;
+    }
+
+    form {
+      max-width: 400px;
+      width: 100%;
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #0078D7;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #005fa3;
+    }
+
+    .resultado {
+      margin-top: 1.5rem;
+      font-weight: bold;
+      background: #e6f7ff;
+      padding: 1rem;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <form id="formulario">
+    <h2 style="text-align:center;">Calculo de compras</h2>
+
+    <label for="nombre">Ingresa tu nombre</label>
+    <input type="text" id="nombre" required>
+
+    <label for="edad">Ingresa tu edad</label>
+    <input type="number" id="edad" min="1" required>
+
+    <label for="cantidad">Cantidad de tarros de pintura</label>
+    <input type="number" id="cantidad" min="1" required>
+
+    <button type="submit">Calcular</button>
+
+    <div class="resultado" id="resultado" hidden></div>
+  </form>
+
+  <script>
+    const formulario = document.getElementById('formulario');
+    const resultado = document.getElementById('resultado');
+    const precioUnitario = 9000;
+
+    function calcularDescuento(edad) {
+      if (edad >= 18 && edad <= 30) return { porcentaje: 0.15, tipo: "15% por edad entre 18 y 30" };
+      if (edad > 30) return { porcentaje: 0.25, tipo: "25% por edad mayor a 30" };
+      return { porcentaje: 0, tipo: "Sin descuento" };
+    }
+
+    formulario.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const nombre = document.getElementById('nombre').value.trim();
+      const edad = parseInt(document.getElementById('edad').value);
+      const cantidad = parseInt(document.getElementById('cantidad').value);
+
+      if (!nombre || isNaN(edad) || edad <= 0 || isNaN(cantidad) || cantidad <= 0) {
+        resultado.innerHTML = `<p style="color:red;">Por favor ingresa valores válidos.</p>`;
+        resultado.hidden = false;
+        return;
+      }
+
+      const totalSinDescuento = cantidad * precioUnitario;
+      const { porcentaje, tipo } = calcularDescuento(edad);
+      const montoDescuento = totalSinDescuento * porcentaje;
+      const totalConDescuento = totalSinDescuento - montoDescuento;
+
+      resultado.innerHTML = `
+        <p><strong>Nombre del cliente:</strong> ${nombre}</p>
+        <p><strong>Total sin descuento:</strong> $${totalSinDescuento}</p>
+        <p><strong>El descuento es:</strong> $${montoDescuento.toFixed(1)}</p>
+        <p><strong>El total a pagar es de:</strong> $${totalConDescuento.toFixed(1)}</p>
+      `;
+      resultado.hidden = false;
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
